@@ -41,6 +41,6 @@ nav:
       - getting_started/run_benchmark.md
       - rohub.md
   - Benchmarks:
-     - Linear Elasticity: "benchmarks/linear elasticity"
+     - Linear Elasticity: "benchmarks/linear-elastic/plate-with-hole.md"
   - "zz_bibliography.md"
 

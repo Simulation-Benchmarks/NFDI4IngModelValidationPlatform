@@ -1,0 +1,161 @@
+# Infinite linear elastic plate with hole
+
+## Problem description
+
+We consider the case of an infinite plate with a circular hole with radius $a$ in the center. The plate is subjected to uniform tensile load $p$ at infinity. The analytical solution for the stress field has been derived by Kirsch in 1898 [@Kirsch1898].
+<!-- include an svg picture here-->
+![Infinite linear elastic plate with hole](plate-with-hole.svg)
+
+The solution is given in polar stress components of the Cauchy stress tensor $\boldsymbol \sigma$ at a point with polar coordinates $(r,\theta)\in\mathbb R_+ \times \mathbb R$. Assume that the infinite plate is loaded in $x$-direction with load $p$, then the polar stress components are given by
+
+$$
+    \begin{aligned}
+        \sigma_{rr}(r,\theta) &= \frac{p}{2}\left(1-\frac{a^2}{r^2}\right)+\frac{p}{2}\left(1-\frac{a^2}{r^2}\right)\left(1-\frac{3a^2}{r^2}\right)\cos(2\theta)\\
+        \sigma_{\theta\theta}(r,\theta) &=\frac{p}{2}\left(1+\frac{a^2}{r^2}\right) - \frac{p}{2}\left(1+\frac{3a^4}{r^4}\right)\cos(2\theta)\\
+        \sigma_{r\theta}(r,\theta) &= -\frac{p}{2}\left(1-\frac{a^2}{r^2}\right)\left(1+\frac{3a^2}{r^2}\right)\sin(2\theta)
+    \end{aligned}
+$$
+
+In order to write the stresses in a cartesian coordiante system, they need to be rotated by $\theta$, which results in
+
+$$
+    \begin{aligned}
+        \sigma_{xx} (r,\theta) &=  \frac{3 a^{4} p \cos{\left(4 \theta \right)}}{2 r^{4}} - \frac{a^{2} p \left(1.5 \cos{\left(2 \theta \right)} + \cos{\left(4 \theta \right)}\right)}{r^{2}} + p \\
+        \sigma_{yy} (r,\theta)&= - \frac{3 a^{4} p \cos{\left(4 \theta \right)}}{2 r^{4}} - \frac{a^{2} p \left(\frac{\cos{\left(2 \theta \right)}}{2} - \cos{\left(4 \theta \right)}\right)}{r^{2}}\\
+        \sigma_{xy} (r,\theta) &= \frac{3 a^{4} p \sin{\left(4 \theta \right)}}{2 r^{4}} - \frac{a^{2} p \left(\frac{\sin{\left(2 \theta \right)}}{2} + \sin{\left(4 \theta \right)}\right)}{r^{2}}
+    \end{aligned}
+$$
+
+with the full stress tensor solution given by
+
+$$
+\boldsymbol\sigma_\mathrm{analytical} (r,\theta)= \begin{bmatrix} \sigma_{xx}(r,\theta) & \sigma_{xy}(r,\theta)\\\ \sigma_{xy}(r,\theta) & \sigma_{yy}(r,\theta) \end{bmatrix}.
+$$
+
+or for a cartesion point $(x,y)\in \mathbb R_+^2$:
+
+$$
+\boldsymbol\sigma_\mathrm{analytical} (x,y)=\boldsymbol\sigma_\mathrm{analytical} \left(\sqrt{x^2 + y^2},\arccos\frac{x}{\sqrt{x^2+y^2}}\right).
+$$
+
+In order to transform this into a practical benchmark, we consider a rectangular subdomain
+of the infinite plate around the hole. The boundary conditions of the subdomain are determined
+from the analytical solution. The example is further reduced by only simulating one quarter
+of the rectangular domain with length $l$ and assuming symmetry conditions at the edges. Let
+
+$$
+\Omega =[0,l]^2 \setminus \lbrace (x,y) \mid \sqrt{x^2+y^2}<a \rbrace
+$$
+
+be the domain of the benchmark example and
+
+$$
+\begin{aligned}
+\Gamma_\mathrm{D_1} &= \lbrace (x,y)\in \partial\Omega | y=0\rbrace \\
+\Gamma_\mathrm{D_2} &= \lbrace (x,y)\in \partial\Omega | x=0\rbrace \\
+\Gamma_\mathrm{N} &= \lbrace (x,y)\in \partial\Omega | x=l \lor y=l \rbrace
+\end{aligned}
+$$
+
+then the PDE with the displacement $\boldsymbol u$ as solution variable is given by
+
+$$
+\begin{aligned}
+\mathrm{div}\boldsymbol{\sigma}(\boldsymbol{\varepsilon}(\boldsymbol{u})) &= 0 &\quad \text{ on } \Omega & \\
+\boldsymbol{\varepsilon}(\boldsymbol u) &= \frac{1}{2}\left(\nabla \boldsymbol u + (\nabla\boldsymbol u)^\top\right) &&\text{Infinitesimal strain}\\
+\boldsymbol{\sigma}(\boldsymbol{\varepsilon}) &= \frac{E}{1-\nu^2}\left((1-\nu)\boldsymbol{\varepsilon} + \nu \mathrm{tr}\boldsymbol{\varepsilon}\boldsymbol I_2\right) && \text{Plane stress law}\\
+\boldsymbol u_y &=0 & \text{ on } \Gamma_\mathrm{D_1}& \text{ Dirichlet BC}\\
+\boldsymbol u_x &=0 & \text{ on } \Gamma_\mathrm{D_2}& \text{ Dirichlet BC}\\
+\boldsymbol t &= \tilde{\boldsymbol{t}} & \text{ on } \Gamma_\mathrm{N} & \text{ Neumann BC}\\
+\end{aligned}
+$$
+
+with the material parameters $E,\nu$ -- the Youngs modulus and Poisson ratio. The traction $\boldsymbol t$ is the Cauchy stress tensor multiplied by the normal vector on the boundary $\boldsymbol \sigma \cdot \boldsymbol n$. Prescribing a value $\tilde{\boldsymbol t}$ on a subset of the boundary $\partial\Omega$ is referred to as a Neumann boundary condition in computational mechanics. In this specific example,
+
+$$
+\tilde{\boldsymbol t} =\boldsymbol\sigma_\mathrm{analytical} \cdot \boldsymbol{n}.
+$$
+
+## Weak formulation and numerical solution
+
+In the weak formulation of the problem, we want to find $\boldsymbol u$ such that
+
+$$
+B(\boldsymbol u,\boldsymbol v) = f(\boldsymbol{v}) \quad \forall \boldsymbol v
+$$
+
+with a test function $\boldsymbol{v}$ and
+
+$$
+\begin{aligned}
+B(\boldsymbol u,\boldsymbol v) &= \int_{\Omega} \boldsymbol\varepsilon(\boldsymbol{v}) : \boldsymbol{\sigma}(\boldsymbol{\varepsilon}(\boldsymbol{u})) \mathrm{d}{\boldsymbol{x}} \\
+    f(\boldsymbol v)&=\int_{\Gamma_{\mathrm{N}}} {\boldsymbol{t}}\cdot\boldsymbol{v}\mathrm{d}{\boldsymbol{s}}.
+\end{aligned}
+$$
+
+
+In order to solve the weak formulation, the finite-element method (FEM) can be used. This method discretizes the domain $\Omega$ into so called finite elements that can for example be triangles or quadrilaterals in 2D. On these elements, ansatz functions are defined such that they are continuous on the boundaries between elements. These functions form a basis for the solution space for an approximate solution $\boldsymbol{u}_h$ of the problem.
+
+## Output metrics
+
+- The approximate solution is compared with the analytical solution using the $L_2$ norm which is defined as
+
+    $$
+    \Vert \boldsymbol{f}\Vert_{L_2} = \sqrt{\int_\Omega \left|\boldsymbol{f}(\boldsymbol{x})\right|^2 \mathrm d \boldsymbol x}
+    $$
+
+    This norm is computed for the error between the finite element solution and the analytical solution of displacements i.e., $\Vert \boldsymbol{u}-\boldsymbol{u}_h\Vert_{L_2}$.
+
+- The maximum displacement error is computed at the nodes of the finite element mesh with respect to the analytical solution.
+
+    $$
+    e_{\max}
+    =
+    \max_{i \in \mathcal{N}}
+    \left\|
+    \mathbf{u}(\mathbf{x}_i)
+    -
+    \mathbf{u}_h(\mathbf{x}_i)
+    \right\|
+    $$
+
+    where $\mathcal{N}$ denotes the set of nodes of the finite element mesh.
+
+- Max Von-Mises stress.
+
+- Displacement at the top-right corner of the plate.
+
+- The reaction force at the left boundary.
+
+- The number of Degrees of Freedom in the finite element mesh.
+
+## Table of parameters
+
+### Model parameters
+| Parameter    | Description                     |
+| ------------ | ------------------------------  |
+| $a$[m]   | Radius of the hole.             |
+| $l$[m]   | Length of the benchmark domain. |
+| $E$[Pa]  | Youngs modulus.                 |
+| $\nu$[-]  | Poisson ratio.                  |
+| $p$[Pa]  | Load at infinity.               |
+
+### Numerical parameters
+
+| Parameter    | Description                     |
+| ------------ | ------------------------------  |
+| $h$[m]   | Element size.                        |
+| $q$[-] | Element order, i.e. the geometry interpolation order (curved edges or linear edges). |
+| $p$[-]  | Degree of the ansatz functions.           |
+| $r$[-]  | Degree of the quadrature rule, meaning the polynomial degree which is still integrated exactly.      |
+| $\mathcal Q$[-]  | Quadrature rule (e.g. Gauss or Gauss-Lobatto).               |
+
+
+## Numerical Results
+
+The notebooks in `notebooks/` are rebuilt on every push to `main` by the
+`merge-docs-to-notebooks` GitHub Actions workflow. The first cell of each
+notebook is generated from this document.
+
+- [`notebooks/plate_with_hole_fenics.ipynb`](../../notebooks/plate_with_hole_fenics.ipynb) — FEniCS x postprocessing.
+- [`notebooks/plate_with_hole_Kratos.ipynb`](../../notebooks/plate_with_hole_Kratos.ipynb) — Kratos Multiphysics postprocessing.
