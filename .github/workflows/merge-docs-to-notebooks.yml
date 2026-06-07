@@ -33,6 +33,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # The two jobs in this workflow can race; pull the latest main
+          # and rebase the local commit on top of it before pushing.
+          git pull --rebase --autostash origin main
           if git diff --quiet -- notebooks/plate_with_hole_fenics.ipynb; then
             echo "No changes to the FEniCS notebook."
             exit 0
@@ -73,6 +76,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # The two jobs in this workflow can race; pull the latest main
+          # and rebase the local commit on top of it before pushing.
+          git pull --rebase --autostash origin main
           if git diff --quiet -- notebooks/plate_with_hole_Kratos.ipynb; then
             echo "No changes to the Kratos notebook."
             exit 0
