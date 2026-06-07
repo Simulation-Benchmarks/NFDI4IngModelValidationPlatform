@@ -32,7 +32,7 @@ linear-elastic-plate-with-hole/Snakefile
 
 ### Parameter JSON File
 
-A `parameter_*.json` file defines all the user-adjustable parameters for mesh generation, material properties, boundary conditions, and solver settings for finite element simulations. Each parameter file represents a unique configuration of these parameters that will be processed by the workflow system, e.g. [parameter_1.json](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/parameters_1.json).
+A `parameter_*.json` file defines all the user-adjustable parameters for mesh generation, material properties, boundary conditions, and solver settings for finite element simulations. Each parameter file represents a unique configuration of these parameters that will be processed by the workflow system, e.g. [parameter_1.json](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/fenics/parameters_1.json).
 
 ```json
 {   
@@ -44,11 +44,11 @@ The keyword `"configuration"` is a unique identifier for the provided parameter 
 
 ### Configuration Generator
 
-`generate_config.py` file writes a configuration file for the workflow managers (snakemake or nextflow) extracting the configuration information from `parameter_*.json` files. Further, it lists the simulation tools that are going to run the different parameter configurations, e.g. [generate_config.py](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/generate_config.py).
+`generate_config.py` file writes a configuration file for the workflow managers (snakemake or nextflow) extracting the configuration information from `parameter_*.json` files. Further, it lists the simulation tools that are going to run the different parameter configurations, e.g. [generate_config.py](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/fenics/generate_config.py).
 
 ### Mesh Generation
 
-The `create_mesh.py` file contains the code for mesh generation. In case the mesh(es) are already available, the file is not needed. In the `linear-elastic-plate-with-hole` example the [create_mesh.py](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/create_mesh.py) file:
+The `create_mesh.py` file contains the code for mesh generation. In case the mesh(es) are already available, the file is not needed. In the `linear-elastic-plate-with-hole` example the [create_mesh.py](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/create_mesh.py) file:
 
 1. receives inputs from `\parameter_*.json` and outputs `.msh` files.
 2. Uses `gmsh` library for mesh generation.

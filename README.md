@@ -8,6 +8,7 @@ This is the main repository of the NFDI4Ing Model Validation Platform. It contai
 |-----------|------------|-------------|
 | Linear Elastic Plate with Hole | [Simulation-Benchmarks/linear-elastic-plate-with-hole](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole) | Convergence study for linear elasticity with analytical solution |
 | Rotating Cylinders | [Simulation-Benchmarks/rotating-cylinders](https://github.com/Simulation-Benchmarks/rotating-cylinders) | Navier-Stokes flow between rotating cylinders (Taylor-Couette) |
+| Hele-Shaw Cells | [Simulation-Benchmarks/hele-shaw-cells-example](https://github.com/Simulation-Benchmarks/hele-shaw-cells-example) | Radial viscous fingering in a 2D circular Hele-Shaw cell (VOF, gap-averaged, OpenFOAM heleShawFoam) |
 
 ## Repository Structure
 

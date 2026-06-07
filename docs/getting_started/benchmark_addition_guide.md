@@ -16,16 +16,16 @@ The steps are as follows:
         ├── tool_B
         ```
 
-    and add the scripts, environment files, sub-workflows required by the tool inside the tool's folder. Cf. [main.nf](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/main.nf) and [Snakefile](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/Snakefile) for details on how to add a tool.
+    and add the scripts, environment files, sub-workflows required by the tool inside the tool's folder. Cf. [main.nf](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/main.nf) and [Snakefile](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/Snakefile) for details on how to add a tool.
 
 3. **Define parameter configurations**
 
-    For each parameter configuration run using simulation tools, create a JSON file in `benchmarks/problem/` specifying parameters related to the domain geometry, mesh information, and constitutive model parameters, cf. [parameter_1.json](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/parameters_1.json)
+    For each parameter configuration run using simulation tools, create a JSON file in `benchmarks/problem/` specifying parameters related to the domain geometry, mesh information, and constitutive model parameters, cf. [parameter_1.json](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/fenics/parameters_1.json)
 
 4. **Create a script for discovering the configurations**
 
-    - Copy the script `benchmarks/linear-elastic-plate-with-hole/generate_config.py` to `benchmarks/problem_name/`.
-    - Modify the list of simulation tools for the benchmark, cf. [generate_config.py](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/generate_config.py).
+    - Copy the script `linear-elastic-plate-with-hole/generate_config.py` to `benchmarks/problem_name/`.
+    - Modify the list of simulation tools for the benchmark, cf. [generate_config.py](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/fenics/generate_config.py).
 
     **Note:** The simulation-tool-specific keywords are used by the main workflow to call the corresponding sub-workflows.
 
@@ -81,4 +81,4 @@ The steps are as follows:
     - Include rules for:
         - Running `create_mesh.py`.
         - Calling the simulation-tool-specific sub-workflows.
-    - Additional rules can be added depending on the requirements, cf. [main.nf](https://github.com/BAMresearch/NFDI4IngModelValidationPlatform/blob/main/benchmarks/linear-elastic-plate-with-hole/main.nf).
+    - Additional rules can be added depending on the requirements, cf. [main.nf](https://github.com/Simulation-Benchmarks/linear-elastic-plate-with-hole/blob/main/main.nf).
